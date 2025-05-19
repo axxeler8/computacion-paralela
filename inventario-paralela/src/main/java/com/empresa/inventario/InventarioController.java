@@ -17,7 +17,7 @@ public class InventarioController {
         this.inventarioService = new InventarioServiceImpl();
     }
 
-    // ==================== REPUESTOS ====================
+    
     @GetMapping("/repuestos")
     public List<Repuesto> obtenerTodosRepuestos() throws RemoteException {
         return inventarioService.verRepuestos();
@@ -52,7 +52,7 @@ public class InventarioController {
         inventarioService.liberarRepuesto(idUbicacion, sku, cantidad);
     }
 
-    // ==================== RESERVAS ====================
+   
     @GetMapping("/reservas")
     public List<Reserva> obtenerTodasReservas() throws RemoteException {
         return inventarioService.verReservas();
@@ -79,7 +79,7 @@ public class InventarioController {
         inventarioService.liberarReserva(id);
     }
 
-    // ==================== UBICACIONES ====================
+    
     @GetMapping("/ubicaciones/{id}")
     public Ubicacion obtenerUbicacion(@PathVariable int id) throws RemoteException {
         Ubicacion ubicacion = inventarioService.consultarUbicacion(id);
@@ -92,7 +92,7 @@ public class InventarioController {
         return inventarioService.consultarStockUbicacion(id);
     }
 
-    // ==================== VEHÍCULOS ====================
+   
     @GetMapping("/vehiculos/{id}")
     public Vehiculo obtenerVehiculo(@PathVariable int id) throws RemoteException {
         Vehiculo vehiculo = inventarioService.consultarVehiculo(id);
@@ -109,7 +109,7 @@ public class InventarioController {
         private boolean disponible;
         private String nombre;
 
-        // Getters y Setters
+        
         public int getIdUbicacion() { return idUbicacion; }
         public void setIdUbicacion(int idUbicacion) { this.idUbicacion = idUbicacion; }
 
@@ -137,7 +137,7 @@ public class InventarioController {
         private int sku;
         private int cantidad;
 
-        // Getters y Setters
+        
         public int getIdVehiculo() { return idVehiculo; }
         public void setIdVehiculo(int idVehiculo) { this.idVehiculo = idVehiculo; }
 
@@ -148,7 +148,7 @@ public class InventarioController {
         public void setCantidad(int cantidad) { this.cantidad = cantidad; }
     }
 
-    // ==================== MANEJO DE ERRORES ====================
+    
     @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "Recurso no encontrado")
     public static class ResourceNotFoundException extends RuntimeException {
         public ResourceNotFoundException(String message) {

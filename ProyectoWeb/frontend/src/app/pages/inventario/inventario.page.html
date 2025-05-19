@@ -7,7 +7,7 @@
   <ion-grid>
     <ion-row>
 
-      <!-- Columna Repuestos -->
+      
       <ion-col size="12" size-md="6">
         <ion-card class="fade-in">
           <ion-card-header class="card-header-flex">
@@ -22,7 +22,7 @@
             </ion-button>
           </ion-card-header>
 
-          <!-- Menú de opciones repuestos -->
+          
           <ion-card-content *ngIf="modo === ''">
             <ion-button expand="block" (click)="verRepuestos()">
               Ver Repuestos
@@ -38,7 +38,7 @@
             </ion-button>
           </ion-card-content>
 
-          <!-- Listado de repuestos -->
+          
           <ion-card-content *ngIf="modo === 'repuestoVer'">
             <h2>📦 Repuestos disponibles</h2>
             <ion-list>
@@ -48,7 +48,7 @@
             </ion-list>
           </ion-card-content>
 
-          <!-- Consultar repuesto por SKU -->
+       
           <ion-card-content *ngIf="modo === 'repuestoConsultar'">
             <h2>🔍 Consultar Repuesto</h2>
             <ion-item>
@@ -67,7 +67,7 @@
             </div>
           </ion-card-content>
 
-          <!-- Formulario agregar repuesto -->
+          
           <ion-card-content *ngIf="modo === 'repuestoAgregar'">
             <h2>➕ Agregar Repuesto</h2>
             <ion-item>
@@ -116,7 +116,7 @@
             </ion-button>
           </ion-card-content>
 
-          <!-- Formulario liberar repuesto -->
+          
           <ion-card-content *ngIf="modo === 'repuestoLiberar'">
             <h2>➖ Liberar Repuesto</h2>
             <ion-item>
@@ -151,7 +151,7 @@
         </ion-card>
       </ion-col>
 
-      <!-- Columna Reservas -->
+      
       <ion-col size="12" size-md="6">
         <ion-card class="fade-in">
           <ion-card-header class="card-header-flex">
@@ -166,7 +166,7 @@
             </ion-button>
           </ion-card-header>
 
-          <!-- Menú de opciones reservas -->
+          
           <ion-card-content *ngIf="modo === ''">
             <ion-button expand="block" (click)="verReservas()">
               Ver Reservas
@@ -182,7 +182,7 @@
             </ion-button>
           </ion-card-content>
 
-          <!-- Listado reservas -->
+          
           <ion-card-content *ngIf="modo === 'reservaVer'">
             <h2>📋 Reservas registradas</h2>
             <ion-list>
@@ -192,7 +192,7 @@
             </ion-list>
           </ion-card-content>
 
-          <!-- Consultar reserva -->
+          
           <ion-card-content *ngIf="modo === 'reservaConsultar'">
             <h2>🔎 Consultar Reserva</h2>
             <ion-item>
@@ -211,7 +211,7 @@
             </div>
           </ion-card-content>
 
-          <!-- Agregar reserva -->
+         
           <ion-card-content *ngIf="modo === 'reservaAgregar'">
             <h2>➕ Agregar Reserva</h2>
             <ion-item>
@@ -231,7 +231,7 @@
             </ion-button>
           </ion-card-content>
 
-          <!-- Liberar reserva -->
+          
           <ion-card-content *ngIf="modo === 'reservaLiberar'">
             <h2>➖ Liberar Reserva</h2>
             <ion-item>

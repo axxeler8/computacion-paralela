@@ -7,7 +7,7 @@ public class Repuesto implements Serializable {
     private String nombre;
     private int cantidad;
     private int precio;
-    private String categoria;      // ahora String
+    private String categoria;     
     private boolean disponible;
 
     public Repuesto(int sku, String nombre, int cantidad, int precio, String categoria, boolean disponible) {
@@ -23,6 +23,6 @@ public class Repuesto implements Serializable {
     public String getNombre()      { return nombre; }
     public int getCantidad()       { return cantidad; }
     public int getPrecio()         { return precio; }
-    public String getCategoria()   { return categoria; }   // getter String
+    public String getCategoria()   { return categoria; } 
     public boolean isDisponible()  { return disponible; }
 }

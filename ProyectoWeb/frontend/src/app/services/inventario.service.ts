@@ -10,7 +10,7 @@ export class InventarioService {
 
   constructor(private http: HttpClient) { }
 
-  // Repuestos
+  
   getRepuestos(): Observable<any> {
     return this.http.get(`${this.apiUrl}/repuestos`);
   }
@@ -27,7 +27,7 @@ export class InventarioService {
     return this.http.put(`${this.apiUrl}/repuestos/${idUbicacion}/${sku}/liberar?cantidad=${cantidad}`, {});
   }
 
-  // Reservas
+  
   getReservas(): Observable<any> {
     return this.http.get(`${this.apiUrl}/reservas`);
   }

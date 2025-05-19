@@ -16,7 +16,7 @@ reservaSeleccionada: any = null;
 skuBusqueda: string = '';
 idReservaBusqueda: string = '';
 
-// Formularios
+
 nuevoRepuesto: any = { idUbicacion: null, sku: null, cantidad: null, precio: null, categoria: '', disponible: false, nombre: '' };
 liberarRepuestoModel: any = { idUbicacion: null, sku: null, cantidad: null };
 nuevaReserva: any = { idVehiculo: null, sku: null, cantidad: null };
@@ -33,7 +33,7 @@ this.inventarioService.getRepuestos().subscribe({ next: data => this.repuestos =
 this.inventarioService.getReservas().subscribe({ next: data => this.reservas = data, error: err => console.error(err) });
 }
 
-// REPUESTOS ----------------
+
 verRepuestos() { this.setModo('repuestoVer'); }
 
 buscarRepuestoPorSku() {
@@ -75,7 +75,7 @@ resetFormRepuesto() {
 this.nuevoRepuesto = { idUbicacion: null, sku: null, cantidad: null, precio: null, categoria: '', disponible: false, nombre: '' };
 }
 
-// RESERVAS ----------------
+
 verReservas() { this.setModo('reservaVer'); }
 
 buscarReservaPorId() {

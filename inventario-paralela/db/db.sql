@@ -5,7 +5,6 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 CREATE SCHEMA IF NOT EXISTS `bd_lyl` DEFAULT CHARACTER SET utf8 ;
 USE `bd_lyl` ;
 
--- Table `ubicaciones` remains the same
 CREATE TABLE IF NOT EXISTS `bd_lyl`.`ubicaciones` (
   `idUbicacion` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
@@ -15,7 +14,6 @@ CREATE TABLE IF NOT EXISTS `bd_lyl`.`ubicaciones` (
   UNIQUE INDEX `idUbicacion_UNIQUE` (`idUbicacion` ASC) VISIBLE)
 ENGINE = InnoDB;
 
--- Corrected repuestos table
 CREATE TABLE IF NOT EXISTS `bd_lyl`.`repuestos` (
   `idRepuesto` INT NOT NULL AUTO_INCREMENT,
   `idUbicacion` INT NOT NULL,
@@ -36,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `bd_lyl`.`repuestos` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
--- Corrected vehiculos table
+
 CREATE TABLE IF NOT EXISTS `bd_lyl`.`vehiculos` (
   `idVehiculo` INT NOT NULL AUTO_INCREMENT,
   `anio` INT NULL,
@@ -55,7 +53,6 @@ CREATE TABLE IF NOT EXISTS `bd_lyl`.`vehiculos` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
--- The rest of the tables remain unchanged
 CREATE TABLE IF NOT EXISTS `bd_lyl`.`reservas` (
   `idReserva` INT NOT NULL AUTO_INCREMENT,
   `idVehiculo` INT NOT NULL,

@@ -12,7 +12,6 @@ public class ServerMain {
             InventarioService svc = new InventarioServiceImpl();
             registry.rebind("InventarioService", svc);
             System.out.println("Servidor RMI iniciado en puerto 1099...");
-            // <— añade esto para bloquear tu main y mantener vivo el proceso:
             System.out.println("Presione ENTER para apagar el servidor");
             System.in.read();
         } catch (Exception e) {

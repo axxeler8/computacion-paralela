@@ -147,14 +147,14 @@ public class Database {
     public static void insertarReserva(int idVehiculo, int sku, int cantidad) {
         String sql = "INSERT INTO reservas(idVehiculo, sku, cantidad, fecha) VALUES(?,?,?,NOW())";
         try (Connection c = getConnection()) {
-            // Insertar reserva
+            
             try (PreparedStatement ps = c.prepareStatement(sql)) {
                 ps.setInt(1, idVehiculo);
                 ps.setInt(2, sku);
                 ps.setInt(3, cantidad);
                 ps.executeUpdate();
             }
-            // Obtener idUbicacion
+            
             int idUbicacion;
             String selUb = "SELECT idUbicacion FROM repuestos WHERE sku = ?";
             try (PreparedStatement ps2 = c.prepareStatement(selUb)) {
@@ -164,7 +164,7 @@ public class Database {
                     idUbicacion = rs.getInt("idUbicacion");
                 }
             }
-            // Descontar stock
+          
             actualizarStock(idUbicacion, sku, -cantidad);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -173,19 +173,19 @@ public class Database {
 
     public static void eliminarReserva(int idReserva) {
         try (Connection c = getConnection()) {
-            // 1. Leer la reserva
+            
             String sel = "SELECT sku, cantidad FROM reservas WHERE idReserva = ?";
             int sku, cantidad;
             try (PreparedStatement ps = c.prepareStatement(sel)) {
                 ps.setInt(1, idReserva);
                 try (ResultSet rs = ps.executeQuery()) {
-                    if (!rs.next()) return;  // no existe la reserva
+                    if (!rs.next()) return; 
                     sku = rs.getInt("sku");
                     cantidad = rs.getInt("cantidad");
                 }
             }
 
-            // 2. Obtener idUbicacion del repuesto
+           
             String selUb = "SELECT idUbicacion FROM repuestos WHERE sku = ?";
             int idUbicacion;
             try (PreparedStatement ps2 = c.prepareStatement(selUb)) {
@@ -196,10 +196,10 @@ public class Database {
                 }
             }
 
-            // 3. Devolver stock
+            
             actualizarStock(idUbicacion, sku, cantidad);
 
-            // 4. Borrar reserva
+           
             String del = "DELETE FROM reservas WHERE idReserva = ?";
             try (PreparedStatement ps3 = c.prepareStatement(del)) {
                 ps3.setInt(1, idReserva);
@@ -210,7 +210,6 @@ public class Database {
         }
     }
 
-    // Métodos nuevos para RMI impl:
 
     public static int obtenerStockTotalPorUbicacion(int idUbicacion) {
         String sql = "SELECT COALESCE(SUM(cantidad),0) AS total FROM repuestos WHERE idUbicacion = ?";
