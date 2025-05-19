@@ -1,0 +1,282 @@
+<ion-content class="ion-padding">
+  <div class="breadcrumb">
+    <a [routerLink]="['/home']">Administración</a> &rarr;
+    <span>Modificar stock</span>
+  </div>
+
+  <ion-grid>
+    <ion-row>
+
+      <!-- Columna Repuestos -->
+      <ion-col size="12" size-md="6">
+        <ion-card class="fade-in">
+          <ion-card-header class="card-header-flex">
+            <ion-card-title>Repuestos</ion-card-title>
+            <ion-button
+              *ngIf="modo.startsWith('repuesto')"
+              fill="clear"
+              (click)="setModo('')"
+              class="volver-btn"
+            >
+              ← Volver
+            </ion-button>
+          </ion-card-header>
+
+          <!-- Menú de opciones repuestos -->
+          <ion-card-content *ngIf="modo === ''">
+            <ion-button expand="block" (click)="verRepuestos()">
+              Ver Repuestos
+            </ion-button>
+            <ion-button expand="block" (click)="setModo('repuestoConsultar')">
+              Consultar por SKU
+            </ion-button>
+            <ion-button expand="block" (click)="setModo('repuestoAgregar')">
+              Agregar Repuesto
+            </ion-button>
+            <ion-button expand="block" (click)="setModo('repuestoLiberar')">
+              Liberar Repuesto
+            </ion-button>
+          </ion-card-content>
+
+          <!-- Listado de repuestos -->
+          <ion-card-content *ngIf="modo === 'repuestoVer'">
+            <h2>📦 Repuestos disponibles</h2>
+            <ion-list>
+              <ion-item *ngFor="let r of repuestos">
+                SKU {{ r.sku }} - {{ r.nombre }} ({{ r.cantidad }})
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+
+          <!-- Consultar repuesto por SKU -->
+          <ion-card-content *ngIf="modo === 'repuestoConsultar'">
+            <h2>🔍 Consultar Repuesto</h2>
+            <ion-item>
+              <ion-label position="stacked">SKU</ion-label>
+              <ion-input [(ngModel)]="skuBusqueda" type="number"></ion-input>
+            </ion-item>
+            <ion-button expand="block" (click)="buscarRepuestoPorSku()">
+              Buscar
+            </ion-button>
+
+            <div *ngIf="repuestoSeleccionado" class="detalle">
+              <h3>Detalles de Repuesto:</h3>
+              <p>SKU: {{ repuestoSeleccionado.sku }}</p>
+              <p>Nombre: {{ repuestoSeleccionado.nombre }}</p>
+              <p>Cantidad: {{ repuestoSeleccionado.cantidad }}</p>
+            </div>
+          </ion-card-content>
+
+          <!-- Formulario agregar repuesto -->
+          <ion-card-content *ngIf="modo === 'repuestoAgregar'">
+            <h2>➕ Agregar Repuesto</h2>
+            <ion-item>
+              <ion-label position="stacked">ID Ubicación</ion-label>
+              <ion-input
+                [(ngModel)]="nuevoRepuesto.idUbicacion"
+                type="number"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">SKU</ion-label>
+              <ion-input [(ngModel)]="nuevoRepuesto.sku" type="number"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Cantidad</ion-label>
+              <ion-input
+                [(ngModel)]="nuevoRepuesto.cantidad"
+                type="number"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Precio</ion-label>
+              <ion-input
+                [(ngModel)]="nuevoRepuesto.precio"
+                type="number"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Categoría</ion-label>
+              <ion-input [(ngModel)]="nuevoRepuesto.categoria"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>Disponible</ion-label>
+              <ion-toggle [(ngModel)]="nuevoRepuesto.disponible"></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Nombre</ion-label>
+              <ion-input [(ngModel)]="nuevoRepuesto.nombre"></ion-input>
+            </ion-item>
+            <ion-button
+              expand="block"
+              color="success"
+              (click)="enviarNuevoRepuesto()"
+            >
+              Agregar
+            </ion-button>
+          </ion-card-content>
+
+          <!-- Formulario liberar repuesto -->
+          <ion-card-content *ngIf="modo === 'repuestoLiberar'">
+            <h2>➖ Liberar Repuesto</h2>
+            <ion-item>
+              <ion-label position="stacked">ID Ubicación</ion-label>
+              <ion-input
+                [(ngModel)]="liberarRepuestoModel.idUbicacion"
+                type="number"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">SKU</ion-label>
+              <ion-input
+                [(ngModel)]="liberarRepuestoModel.sku"
+                type="number"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Cantidad</ion-label>
+              <ion-input
+                [(ngModel)]="liberarRepuestoModel.cantidad"
+                type="number"
+              ></ion-input>
+            </ion-item>
+            <ion-button
+              expand="block"
+              color="danger"
+              (click)="liberarRepuesto()"
+            >
+              Liberar
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <!-- Columna Reservas -->
+      <ion-col size="12" size-md="6">
+        <ion-card class="fade-in">
+          <ion-card-header class="card-header-flex">
+            <ion-card-title>Reservas</ion-card-title>
+            <ion-button
+              *ngIf="modo.startsWith('reserva')"
+              fill="clear"
+              (click)="setModo('')"
+              class="volver-btn"
+            >
+              ← Volver
+            </ion-button>
+          </ion-card-header>
+
+          <!-- Menú de opciones reservas -->
+          <ion-card-content *ngIf="modo === ''">
+            <ion-button expand="block" (click)="verReservas()">
+              Ver Reservas
+            </ion-button>
+            <ion-button expand="block" (click)="setModo('reservaConsultar')">
+              Consultar por ID
+            </ion-button>
+            <ion-button expand="block" (click)="setModo('reservaAgregar')">
+              Agregar Reserva
+            </ion-button>
+            <ion-button expand="block" (click)="setModo('reservaLiberar')">
+              Liberar Reserva
+            </ion-button>
+          </ion-card-content>
+
+          <!-- Listado reservas -->
+          <ion-card-content *ngIf="modo === 'reservaVer'">
+            <h2>📋 Reservas registradas</h2>
+            <ion-list>
+              <ion-item *ngFor="let r of reservas">
+                ID {{ r.idReserva }} - SKU {{ r.sku }} x{{ r.cantidad }}
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+
+          <!-- Consultar reserva -->
+          <ion-card-content *ngIf="modo === 'reservaConsultar'">
+            <h2>🔎 Consultar Reserva</h2>
+            <ion-item>
+              <ion-label position="stacked">ID Reserva</ion-label>
+              <ion-input [(ngModel)]="idReservaBusqueda" type="number"></ion-input>
+            </ion-item>
+            <ion-button expand="block" (click)="buscarReservaPorId()">
+              Buscar
+            </ion-button>
+            <div *ngIf="reservaSeleccionada" class="detalle">
+              <h3>Detalles de Reserva:</h3>
+              <p>ID: {{ reservaSeleccionada.idReserva }}</p>
+              <p>Vehículo ID: {{ reservaSeleccionada.idVehiculo }}</p>
+              <p>SKU: {{ reservaSeleccionada.sku }}</p>
+              <p>Cantidad: {{ reservaSeleccionada.cantidad }}</p>
+            </div>
+          </ion-card-content>
+
+          <!-- Agregar reserva -->
+          <ion-card-content *ngIf="modo === 'reservaAgregar'">
+            <h2>➕ Agregar Reserva</h2>
+            <ion-item>
+              <ion-label position="stacked">ID Vehículo</ion-label>
+              <ion-input [(ngModel)]="nuevaReserva.idVehiculo" type="number"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">SKU</ion-label>
+              <ion-input [(ngModel)]="nuevaReserva.sku" type="number"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Cantidad</ion-label>
+              <ion-input [(ngModel)]="nuevaReserva.cantidad" type="number"></ion-input>
+            </ion-item>
+            <ion-button expand="block" color="success" (click)="enviarNuevaReserva()">
+              Agregar
+            </ion-button>
+          </ion-card-content>
+
+          <!-- Liberar reserva -->
+          <ion-card-content *ngIf="modo === 'reservaLiberar'">
+            <h2>➖ Liberar Reserva</h2>
+            <ion-item>
+              <ion-label position="stacked">ID Reserva</ion-label>
+              <ion-input [(ngModel)]="liberarReservaId" type="number"></ion-input>
+            </ion-item>
+            <ion-button expand="block" color="danger" (click)="eliminarReserva()">
+              Eliminar
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<style>
+  .fade-in {
+    animation: fadeSlide 0.4s ease-in-out;
+  }
+
+  @keyframes fadeSlide {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .card-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .volver-btn {
+    margin-left: auto;
+    font-size: 0.9rem;
+  }
+
+  .breadcrumb {
+    margin-bottom: 1rem;
+  }
+</style>

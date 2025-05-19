@@ -1,0 +1,14 @@
+com/empresa/inventario/Ubicacion.class
+com/empresa/inventario/Repuesto.class
+com/empresa/inventario/InventarioService.class
+com/empresa/inventario/Database.class
+com/empresa/inventario/InventarioController.class
+com/empresa/taller/ConsolaTaller.class
+com/empresa/inventario/InventarioServiceImpl.class
+com/empresa/server/ServerMain.class
+com/empresa/inventario/Vehiculo.class
+com/empresa/inventario/InventarioController$ReservaRequest.class
+com/empresa/inventario/Reserva.class
+com/empresa/inventario/Application.class
+com/empresa/inventario/InventarioController$RepuestoRequest.class
+com/empresa/inventario/InventarioController$ResourceNotFoundException.class
