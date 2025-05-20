@@ -10,9 +10,7 @@ public class Reserva implements Serializable {
     private int sku;
     private int cantidad;
 
-    /**
-     * Constructor sin argumentos requerido para deserialización Jackson/RMI
-     */
+    
     public Reserva() {
     }
 

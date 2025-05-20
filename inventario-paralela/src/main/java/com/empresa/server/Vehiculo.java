@@ -13,9 +13,7 @@ public class Vehiculo implements Serializable {
     private String cilindraje;
     private String color;
 
-    /**
-     * Constructor sin argumentos requerido para deserialización Jackson/RMI
-     */
+
     public Vehiculo() {
     }
 

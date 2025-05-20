@@ -12,9 +12,7 @@ public class Repuesto implements Serializable {
     private String categoria;
     private boolean disponible;
 
-    /**
-     * Constructor sin argumentos requerido para deserialización Jackson/RMI
-     */
+   
     public Repuesto() {
     }
 

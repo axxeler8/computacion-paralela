@@ -10,9 +10,7 @@ public class Ubicacion implements Serializable {
     private String direccion;
     private int capacidad;
 
-    /**
-     * Constructor sin argumentos requerido para deserialización Jackson/RMI
-     */
+   
     public Ubicacion() {
     }
 

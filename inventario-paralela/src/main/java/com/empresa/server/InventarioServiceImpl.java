@@ -42,7 +42,7 @@ public class InventarioServiceImpl extends UnicastRemoteObject implements Invent
                 Repuesto.class
             ).getBody();
         } catch (HttpClientErrorException.NotFound nf) {
-            // Repuesto no existe: retornamos null para que la consola lo detecte
+            
             return null;
         } catch (Exception e) {
             throw new RemoteException("Error al consultar repuesto: " + e.getMessage());
@@ -102,7 +102,7 @@ public class InventarioServiceImpl extends UnicastRemoteObject implements Invent
                 Reserva.class
             ).getBody();
         } catch (HttpClientErrorException.NotFound nf) {
-            // 404 ⇒ reserva no existe → devolvemos null
+          
             return null;
         } catch (Exception e) {
             throw new RemoteException("Error al consultar reserva: " + e.getMessage());
@@ -148,7 +148,7 @@ public class InventarioServiceImpl extends UnicastRemoteObject implements Invent
             return response.getBody();
 
         } catch (HttpClientErrorException.NotFound nf) {
-            // 404: ubicación no existe → devolvemos null
+           
             return null;
 
         } catch (Exception e) {
@@ -179,7 +179,7 @@ public class InventarioServiceImpl extends UnicastRemoteObject implements Invent
             return response.getBody();
 
         } catch (HttpClientErrorException.NotFound nf) {
-            // Si no existe, devolvemos null para que la consola vuelva a pedir ID
+            
             return null;
 
         } catch (Exception e) {
@@ -201,7 +201,7 @@ public class InventarioServiceImpl extends UnicastRemoteObject implements Invent
         }
     }
 
-    // Clases internas para mapear las solicitudes
+  
     private static class RepuestoRequest {
         public int idUbicacion;
         public int sku;
