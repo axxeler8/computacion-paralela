@@ -1,10 +1,10 @@
 package com.empresa.taller;
 
-import com.empresa.inventario.InventarioService;
-import com.empresa.inventario.Repuesto;
-import com.empresa.inventario.Reserva;
-import com.empresa.inventario.Ubicacion;
-import com.empresa.inventario.Vehiculo;
+import com.empresa.server.InventarioService;
+import com.empresa.server.Repuesto;
+import com.empresa.server.Reserva;
+import com.empresa.server.Ubicacion;
+import com.empresa.server.Vehiculo;
 
 import java.rmi.Naming;
 import java.util.List;
@@ -26,8 +26,7 @@ public class ConsolaTaller {
             System.out.println("7) Agregar reserva");
             System.out.println("8) Liberar reserva");
             System.out.println("9) Salir");
-            System.out.print("Selecciona una opción: ");
-            int op = Integer.parseInt(sc.nextLine());
+            int op = leerEntero(sc, "Selecciona una opción: ", 1, 9);
 
             switch (op) {
                 case 1: mostrarRepuestos(svc); break;
@@ -42,10 +41,41 @@ public class ConsolaTaller {
                     System.out.println("Saliendo...");
                     sc.close();
                     System.exit(0);
-                default:
-                    System.out.println("Opción inválida. Intenta de nuevo.");
             }
         }
+    }
+
+    private static int leerEntero(Scanner sc, String prompt, int min, int max) {
+        Integer val = null;
+        while (val == null) {
+            System.out.print(prompt);
+            String line = sc.nextLine().trim();
+            try {
+                int parsed = Integer.parseInt(line);
+                if (parsed < min || parsed > max) {
+                    System.out.printf("⚠ Ingresa un número entre %d y %d.%n", min, max);
+                } else {
+                    val = parsed;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("⚠ Formato inválido. Ingresa un número entero.");
+            }
+        }
+        return val;
+    }
+
+    private static int leerEntero(Scanner sc, String prompt) {
+        Integer val = null;
+        while (val == null) {
+            System.out.print(prompt);
+            String line = sc.nextLine().trim();
+            try {
+                val = Integer.parseInt(line);
+            } catch (NumberFormatException e) {
+                System.out.println("⚠ Formato inválido. Ingresa un número entero.");
+            }
+        }
+        return val;
     }
 
     private static void mostrarRepuestos(InventarioService svc) throws Exception {
@@ -60,18 +90,9 @@ public class ConsolaTaller {
     private static void consultarRepuestoPorSku(InventarioService svc, Scanner sc) throws Exception {
         Repuesto r = null;
         while (r == null) {
-            System.out.print("\nSKU: ");
-            int sku;
-            try {
-                sku = Integer.parseInt(sc.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("SKU inválido. Ingresa un número entero.");
-                continue;
-            }
+            int sku = leerEntero(sc, "\nSKU: ");
             r = svc.consultarRepuesto(sku);
-            if (r == null) {
-                System.out.println("No existe ese SKU. Intenta nuevamente.");
-            }
+            if (r == null) System.out.println("No existe ese SKU. Intenta nuevamente.");
         }
         System.out.printf(
             "\nDetalles del Repuesto:\n" +
@@ -87,22 +108,20 @@ public class ConsolaTaller {
 
     private static void agregarRepuesto(InventarioService svc, Scanner sc) throws Exception {
         System.out.println("\n-- Agregar Repuesto --");
-        int idUb;
-        while (true) {
-            System.out.print("ID de Ubicación: ");
-            idUb = Integer.parseInt(sc.nextLine());
-            if (svc.consultarUbicacion(idUb) == null) {
+        Integer idUb = null;
+        while (idUb == null) {
+            int parsed = leerEntero(sc, "ID de Ubicación: ");
+            if (svc.consultarUbicacion(parsed) == null) {
                 System.out.println("⚠ Ubicación inexistente. Intenta de nuevo.");
             } else {
-                break;
+                idUb = parsed;
             }
         }
         Ubicacion ub = svc.consultarUbicacion(idUb);
 
         int sku;
         while (true) {
-            System.out.print("SKU: ");
-            sku = Integer.parseInt(sc.nextLine());
+            sku = leerEntero(sc, "SKU: ");
             if (svc.consultarRepuesto(sku) != null) {
                 System.out.println("⚠ SKU ya existe. Intenta otro.");
             } else {
@@ -112,18 +131,24 @@ public class ConsolaTaller {
 
         int cantidad;
         while (true) {
-            System.out.print("Cantidad: ");
-            cantidad = Integer.parseInt(sc.nextLine());
+            cantidad = leerEntero(sc, "Cantidad: ");
             int stockActual = svc.consultarStockUbicacion(idUb);
-            if (stockActual + cantidad > ub.getCapacidad()) {
-                System.out.printf("⚠ Excede capacidad. Actual: %d, Máxima: %d. Intenta de nuevo.%n", stockActual, ub.getCapacidad());
+            if (cantidad < 1) {
+                System.out.println("⚠ La cantidad debe ser al menos 1. Intenta de nuevo.");
+            } else if (stockActual + cantidad > ub.getCapacidad()) {
+                System.out.printf("⚠ Excede capacidad. Actual: %d, Máxima: %d. Intenta de nuevo.%n",
+                    stockActual, ub.getCapacidad());
             } else {
                 break;
             }
         }
 
-        System.out.print("Precio: ");
-        int precio = Integer.parseInt(sc.nextLine());
+        int precio;
+        while (true) {
+            precio = leerEntero(sc, "Precio: ");
+            if (precio < 0) System.out.println("⚠ El precio no puede ser negativo. Intenta de nuevo.");
+            else break;
+        }
 
         System.out.print("Categoría (texto): ");
         String categoria = sc.nextLine().trim();
@@ -146,27 +171,34 @@ public class ConsolaTaller {
 
     private static void liberarRepuesto(InventarioService svc, Scanner sc) throws Exception {
         System.out.println("\n-- Liberar Repuesto --");
-        System.out.print("ID de Ubicación: ");
-        int idUb = Integer.parseInt(sc.nextLine());
+        Integer idUb = null;
+        while (idUb == null) {
+            int parsed = leerEntero(sc, "ID de Ubicación: ");
+            if (svc.consultarUbicacion(parsed) == null) {
+                System.out.println("⚠ Ubicación inexistente. Intenta de nuevo.");
+            } else {
+                idUb = parsed;
+            }
+        }
+        // ya validada existencia
 
         Repuesto rep;
         int sku;
         while (true) {
-            System.out.print("SKU: ");
-            sku = Integer.parseInt(sc.nextLine());
+            sku = leerEntero(sc, "SKU: ");
             rep = svc.consultarRepuestoEnUbicacion(idUb, sku);
             if (rep == null) {
-                System.out.println("⚠ No existe el SKU " + sku + " en la ubicación " + idUb + ". Intenta de nuevo.");
+                System.out.printf("⚠ No existe el SKU %d en la ubicación %d. Intenta de nuevo.%n", sku, idUb);
             } else {
                 break;
             }
         }
 
+        int cantidad;
         while (true) {
-            System.out.print("Cantidad a liberar (máx " + rep.getCantidad() + "): ");
-            int cantidad = Integer.parseInt(sc.nextLine());
+            cantidad = leerEntero(sc, String.format("Cantidad a liberar (máx %d): ", rep.getCantidad()));
             if (cantidad < 1 || cantidad > rep.getCantidad()) {
-                System.out.println("⚠ Cantidad inválida. Debe estar entre 1 y " + rep.getCantidad() + ". Intenta de nuevo.");
+                System.out.printf("⚠ Cantidad inválida. Debe estar entre 1 y %d. Intenta de nuevo.%n", rep.getCantidad());
             } else {
                 svc.liberarRepuesto(idUb, sku, cantidad);
                 System.out.println("✔ Repuesto liberado.");
@@ -187,18 +219,9 @@ public class ConsolaTaller {
     private static void consultarReservaPorId(InventarioService svc, Scanner sc) throws Exception {
         Reserva r = null;
         while (r == null) {
-            System.out.print("\nID de Reserva: ");
-            int id;
-            try {
-                id = Integer.parseInt(sc.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("ID inválido. Ingresa un número entero.");
-                continue;
-            }
+            int id = leerEntero(sc, "\nID de Reserva: ");
             r = svc.consultarReserva(id);
-            if (r == null) {
-                System.out.println("No existe una reserva con ese ID. Intenta nuevamente.");
-            }
+            if (r == null) System.out.println("No existe una reserva con ese ID. Intenta nuevamente.");
         }
         System.out.printf(
             "\nDetalles de la Reserva:\nID Reserva: %d%nVehículo ID: %d%nSKU: %d%nCantidad: %d%n",
@@ -210,41 +233,29 @@ public class ConsolaTaller {
         System.out.println("\n-- Agregar Reserva --");
         int idVeh;
         while (true) {
-            System.out.print("ID de Vehículo: ");
-            idVeh = Integer.parseInt(sc.nextLine());
-            Vehiculo veh = svc.consultarVehiculo(idVeh);
-            if (veh == null) {
-                System.out.println("⚠ Vehículo no encontrado. Intenta de nuevo.");
-            } else {
-                break;
-            }
+            idVeh = leerEntero(sc, "ID de Vehículo: ");
+            if (svc.consultarVehiculo(idVeh) == null) System.out.println("⚠ Vehículo no encontrado. Intenta de nuevo.");
+            else break;
         }
 
         Repuesto rep;
         int sku;
         while (true) {
-            System.out.print("SKU: ");
-            sku = Integer.parseInt(sc.nextLine());
+            sku = leerEntero(sc, "SKU: ");
             rep = svc.consultarRepuesto(sku);
-            if (rep == null) {
-                System.out.println("⚠ No existe el SKU " + sku + ". Intenta de nuevo.");
-            } else if (rep.getCantidad() < 1) {
+            if (rep == null) System.out.println("⚠ No existe el SKU " + sku + ". Intenta de nuevo.");
+            else if (rep.getCantidad() < 1) {
                 System.out.println("⚠ No hay stock disponible para el SKU " + sku + ".");
                 return;
-            } else {
-                break;
-            }
+            } else break;
         }
 
         int cantidad;
         while (true) {
-            System.out.print("Cantidad a reservar (máx " + rep.getCantidad() + "): ");
-            cantidad = Integer.parseInt(sc.nextLine());
+            cantidad = leerEntero(sc, String.format("Cantidad a reservar (máx %d): ", rep.getCantidad()));
             if (cantidad < 1 || cantidad > rep.getCantidad()) {
-                System.out.println("⚠ Cantidad inválida. Debe estar entre 1 y " + rep.getCantidad() + ". Intenta de nuevo.");
-            } else {
-                break;
-            }
+                System.out.printf("⚠ Cantidad inválida. Debe estar entre 1 y %d. Intenta de nuevo.%n", rep.getCantidad());
+            } else break;
         }
 
         svc.agregarReserva(idVeh, sku, cantidad);
@@ -253,8 +264,20 @@ public class ConsolaTaller {
 
     private static void liberarReserva(InventarioService svc, Scanner sc) throws Exception {
         System.out.println("\n-- Liberar Reserva --");
-        System.out.print("ID de Reserva: ");
-        int idRes = Integer.parseInt(sc.nextLine());
+        int idRes;
+        while (true) {
+            idRes = leerEntero(sc, "ID de Reserva: ");
+            if (idRes < 0) {
+                System.out.println("⚠ El ID no puede ser negativo. Intenta de nuevo.");
+                continue;
+            }
+            Reserva r = svc.consultarReserva(idRes);
+            if (r == null) {
+                System.out.println("⚠ No existe una reserva con ese ID. Intenta de nuevo.");
+            } else {
+                break;
+            }
+        }
 
         svc.liberarReserva(idRes);
         System.out.println("✔ Reserva liberada.");

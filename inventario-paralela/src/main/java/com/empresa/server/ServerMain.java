@@ -1,7 +1,5 @@
 package com.empresa.server;
 
-import com.empresa.inventario.InventarioService;
-import com.empresa.inventario.InventarioServiceImpl;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
